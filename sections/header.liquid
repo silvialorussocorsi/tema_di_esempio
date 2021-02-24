@@ -1,3 +1,17 @@
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "id": "primary_link_list",
+      "type": "link_list",
+      "label": "Menu principale",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}
+
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
 
   {%- comment -%}
@@ -18,11 +32,13 @@
   <div class="collapse navbar-collapse" id="header-main-menu">
 
     {%- comment -%}
-      Ciclo che scorre i collegamenti nel menu principale e li visualizza.
+      Codice che cerca il menu principale (elenco di link) configurato nelle impostazioni 
+    della sezione, itera su ogni voce del menu e la visualizza.
     {%- endcomment -%}
-    {%- unless linklists.main-menu.links.size == 0 -%}
+    {%- assign primary_link_list = linklists[section.settings.primary_link_list] -%}
+    {%- unless primary_link_list == blank -%}
     <ul class="navbar-nav mr-auto">
-      {%- for link in linklists.main-menu.links -%}
+      {%- for link in primary_link_list.links -%}
       <li class="nav-item {% if link.active %}active{% endif %}">
         <a class="nav-link" href="{{ link.url }}">{{ link.title | escape }} {% if link.active %}<span class="sr-only">(current)</span>{% endif %}</a>
       </li>
@@ -53,7 +69,7 @@
         {%- endif -%}
       {%- endif -%}
       <li class="nav-item">
-        <a class="nav-link" href="/cart">Cart ({{ cart.item_count }})</a>
+        <a class="nav-link" href="/cart">Carrello ({{ cart.item_count }})</a>
       </li>
     </ul>
   </div>
