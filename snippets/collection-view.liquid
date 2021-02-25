@@ -11,7 +11,7 @@
         <div class="form-group">
           {%- assign current_sort_by = collection.sort_by | default: collection.default_sort_by  -%}
           <label for="sort_by">Ordina per...</label>
-          <select id="sort_by" name="sort_by" class="form-control">
+          <select id="sort_by" name="sort_by" class="form-control" data-submit-on-change="#collection-form">
             <option value="manual" {% if current_sort_by == 'manual' %}selected="selected"{% endif %}>In primo piano</option>
             <option value="price-ascending" {% if current_sort_by == 'price-ascending' %}selected="selected"{% endif %}>Prezzo: dal più basso al più alto</option>
             <option value="price-descending" {% if current_sort_by == 'price-descending' %}selected="selected"{% endif %}>Prezzo: dal più alto al più basso</option>
@@ -25,13 +25,13 @@
 
         <div class="form-group">
           <label for="view">Visualizza come...</label>
-          <select id="view" name="view" class="form-control">
+          <select id="view" name="view" class="form-control" data-submit-on-change="#collection-form">
             <option value="grid" {% if collection-view == 'grid' %}selected="selected"{% endif %}>Griglia</option>
             <option value="list" {% if collection-view == 'list' %}selected="selected"{% endif %}>Lista</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group js-hide">
           <button type="submit" class="btn btn-secondary">Aggiorna</button>
         </div>
         
