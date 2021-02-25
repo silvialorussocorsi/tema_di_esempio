@@ -1,0 +1,42 @@
+{% schema %}
+{
+  "name": "Collezioni in evidenza",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Titolo della sezione"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collezione",
+      "settings": [
+        {
+          "id": "collection",
+          "type": "collection",
+          "label": "Collezione"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collezioni in evidenza",
+      "category": "Funzionalità"
+    }
+  ]
+}
+{% endschema %}
+<div class="container bg-white my-5 text-center">
+  <h2 class="mb-4">{{ section.settings.title | escape }}</h2>
+  <div class="row justify-content-md-center">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'collection' -%}
+        {%- include 'collection' with collections[block.settings.collection] -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
