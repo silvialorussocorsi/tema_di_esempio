@@ -1,0 +1,75 @@
+{%- comment -%}
+
+  Trova un elenco di un massimo di 4 prodotti correlati per il prodotto nel contesto 
+corrente e li visualizza utilizzando lo snippet 'product.liquid'.
+
+I prodotti correlati sono acquisiti da uno dei 3 posti, che vengono provati in ordine:
+
+1. Un metafield 'theme.related_products' sull'oggetto del prodotto, che dovrebbe contenere 
+un elenco separato da virgole di handle di prodotto correlati;
+2. Una collezione con l'handle "product-handle-related", dove "product-handle" è l'handle 
+del prodotto corrente.
+3. Se nessuno di questi viene rilevato, l'elenco dei prodotti viene calcolato manualmente da:
+(a) in primo luogo, trovare una collezione "rilevante" (definita come una collezione in cui 
+si trova il prodotto corrente che non è la collezione "all" e che contiene più di 4 prodotti;
+(b) secondo, assegnando un punteggio a ciascuno dei prodotti di quella collezione in virtù 
+delle somiglianze nelle etichette.
+
+{%- endcomment -%}
+
+{%- assign RELATED_PRODUCTS_LIMIT = 4 -%}
+
+{%- comment -%}
+  Inizia cercando un elenco esplicito di prodotti correlati in un metafield.
+{%- endcomment -%}
+{%- if product.metafields.theme.related_products != blank -%}
+  {%- assign displayed_related_products_count = 0 -%}
+  {%- assign related_product_handles = product.metafields.theme.related_products | split: ',' -%}
+  {%- for related_product_handle in related_product_handles -%}
+    {%- assign related_product = all_products[related_product_handle] -%}
+
+    {%- if related_product -%}
+      {%- include 'product' with related_product -%}
+      {%- assign displayed_related_products_count = displayed_related_products_count | plus: 1 -%}
+    {%- endif -%}
+
+    {%- if displayed_related_products_count == RELATED_PRODUCTS_LIMIT -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- else -%}
+
+  {%- comment -%}
+    Prova a trovare una colezione correlata utilizzando l'handle del prodotto.
+  {%- endcomment -%}
+  {%- assign related_collection_handle = product.handle | append: '-related' -%}
+  {%- assign related_collection = collections[related_collection_handle] -%}
+  {%- if related_collection and related_collection.products.size > 0 %}
+    {%- for related_product in related_collection.products limit: RELATED_PRODUCTS_LIMIT -%}
+      {%- include 'product' with related_product -%}
+    {%- endfor -%}
+  {%- else -%}
+
+    {%- comment -%}
+      Utilizza prodotti di una collezione simile.
+    {%- endcomment -%}
+
+    {%- assign related_collection = nil -%}
+    {%- for collection in product.collections -%}
+      {%- unless collection.handle == 'all' -%}
+      {%- if related_collection == blank or collection.products.size > related_collection.products.size -%}
+        {%- assign related_collection = collection -%}
+        {%- if related_collection.products.size > 5 -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- endunless -%}
+    {%- endfor -%}
+
+    {%- for related_product in related_collection.products limit: RELATED_PRODUCTS_LIMIT -%}
+      {%- include 'product' with related_product -%}
+    {%- endfor -%}
+
+  {%- endif -%}
+
+{%- endif -%}
