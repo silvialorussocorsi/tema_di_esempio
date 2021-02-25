@@ -1,0 +1,45 @@
+<div class="card mt-3">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs" role="tablist">
+      <li role="presentation" class="nav-item">
+        <a href="#description" class="nav-link active" aria-controls="description" role="tab" data-toggle="tab">
+          Descrizione
+        </a>
+      </li>
+      <li role="presentation" class="nav-item">
+        <a href="#shipping" class="nav-link" aria-controls="shipping" role="tab" data-toggle="tab">
+          Spedizione
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="card-block">
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="description">
+        {{ product.description }}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="shipping">
+        <p>
+          Gli ordini effettuati prima delle 16:00 vengono spediti lo stesso giorno. La tabella seguente mostra i tempi 
+          di spedizione approssimativi utilizzando il nostro servizio di spedizione standard.
+        </p>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Italia</th>
+              <td>2-3 giorni lavorativi</td>
+            </tr>
+            <tr>
+              <th>Europa</th>
+              <td>7-10 giorni lavorativi</td>
+            </tr>
+            <tr>
+              <th>USA</th>
+              <td>10-20 giorni lavorativi</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
